@@ -9,17 +9,7 @@
 # production
 /build
 /public/exports/
-/public/uploads/refund_bills/
-/public/uploads/bills/
-/public/uploads/bonofides/
-/public/uploads/hostel_payment/
-/public/uploads/hostel_payment_reciept/
-/public/uploads/stdImages/
-/public/uploads/stdAdhaar/
-/public/uploads/educational/
-/public/uploads/demos/
-/public/uploads/inbox/
-/public/uploads/admissionimports/
+
 
 # misc
 .DS_Store

@@ -17,6 +17,5 @@ router.get('/users/list', Authentication,userController.getAllUsers);
 router.post('/mail/send',Authentication,MailController.send);
 //Mail Configuration CRUD
 router.post('/create/mailconfiguration',Authentication,MailConfigurationController.createConfiguration);
-router.post('/verifyotp',Authentication,MailConfigurationController.getDefaultConfiguration);
-router.delete('/mailconfiguration/delete/:_id', Authentication, MailConfigurationController.deleteConfigurationById);
+router.post('/verifyotp',Authentication,MailConfigurationController.verifyOtp);
 module.exports = router;

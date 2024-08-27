@@ -1,17 +1,18 @@
 'use strict'
 const Users = require('../model/user');
 const {to,TE} =  require('../middlewares/utilities');
-const PointStructure = require('../model/PointStructure');
 module.exports={
     createUser : async(payload)=>{
         let error,duplicateData, newUser;
-        
         [error, duplicateData] = await to(Users.find({email:payload.email}));
+        console.log(duplicateData);
+        console.log(error);
         if(duplicateData.length>0){
             {TE("User already exists with this email.!");}
         }
         if(error) {TE(error, true)};
-      
+        newUser = new Users(payload);
+
         [error,newUser] = await to(newUser.save());
         if (error) {
             TE(error.message, true);
@@ -25,69 +26,18 @@ module.exports={
         // if(roleData){
         //     obj = roleData[0].users;
         // };
+        console.log("all userssss")
         let options = {
             sort: { createdAt: -1 },
             lean: true,
             page: query.page? query.page:1,
             limit: query.limit? query.limit:10
         };
-        if(query.type){
-            filter.accessLevel = query.type;
-        }
-        if(user.accessLevel == 'counselor'){
-            filter.createdBy=new mongoose.Types.ObjectId(user._id);
-        }
-        let userAggregate = Users.aggregate([
-            {
-                $match:filter
-            },{
-                $lookup:{
-                    from:"user_roles",
-                    localField:"role",
-                    foreignField:"_id",
-                    as:"role"
-                }
-            },{
-                $unwind:{ 'path': '$role', 'preserveNullAndEmptyArrays': true }
-            },{
-                $lookup:{
-                    from:"Users",
-                    localField:"createdBy",
-                    foreignField:"_id",
-                    as:"createdBy"
-                }
-            },{
-                $unwind:{ 'path': '$createdBy', 'preserveNullAndEmptyArrays': true }
-            },{
-                $lookup:{
-                    from:"State",
-                    localField:"state",
-                    foreignField:"_id",
-                    as:"state"
-                }
-            },{
-                $unwind:{ 'path': '$state', 'preserveNullAndEmptyArrays': true }
-            },{
-                $lookup:{
-                    from:"districts",
-                    localField:"adharDistrict",
-                    foreignField:"_id",
-                    as:"adharDistrict"
-                }
-            },{
-                $unwind:{ 'path': '$adharDistrict', 'preserveNullAndEmptyArrays': true }
-            },{
-                $project:{
-                    "role._id":1,"role.roleName":1,
-                    "_id":1,"email":1,"fullName":1,
-                    "phone":1,"accessLevel":1,"status":1,"state._id":1,"state.state":1,"adharDistrict._id":1,"adharDistrict.district":1,
-                    "createdBy._id":1,"createdBy.fullName":1,"createdAt":1,"updatedAt":1,"counselor_id": 1
-                }
-            }
-        ]);
+        
+        let userAggregate = Users.aggregate();
         [error, usersList] = await to(Users.aggregatePaginate(userAggregate,options));
         if(error) TE(error.message,true);
-        return usersList ? { users:usersList, permissions:obj}:false;
+        return usersList ;
     },
     displayUserById:async(userId)=>{
         let error,user;

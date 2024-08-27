@@ -1,7 +1,6 @@
 let {to,TE,ReE,ReS} = require('../middlewares/utilities');
 var nodemailer = require('nodemailer');
 const MailConfiguration = require('../model/MailConfiguration');
-let Admission =  require('../model/Admission');
 module.exports = {
     sendMail: async(payload) => {
       let configDetails, err, error;

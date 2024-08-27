@@ -14,7 +14,7 @@ var userSchema = mongoose.Schema({
     // role            : {type: mongoose.Schema.Types.ObjectId, ref: 'user_roles', required: false},
     // createdBy            : {type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: false,default:null},
     // accessLevel     : {type:String, required:false,default:null},
-    // status: {type: Boolean,required: true,default: 1},
+    status: {type: Boolean,required: true,default: 1},
 }, {
     versionKey: false,
     timestamps: true
